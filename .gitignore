@@ -6,7 +6,6 @@ dist/
 wheels/
 *.egg-info
 test_flask/config.py
-test_flask/requirements.txt
 work.py
 uv.lock
 # Virtual environments
