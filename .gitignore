@@ -5,8 +5,9 @@ build/
 dist/
 wheels/
 *.egg-info
-test_flask/config.py
+
 work.py
 uv.lock
 # Virtual environments
 .venv
+.idea
