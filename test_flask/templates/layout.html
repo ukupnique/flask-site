@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Alice&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+
+    {% if title %}
+    <title>Нейроварево - {{ title }}</title>
+    {% else %}
+    <title>Нейроварево</title>
+    {% endif %}
+
+    {% block head %} {% endblock head %}
+
+    <style>
+        body{
+          background-color: #e5e5e5;
+          margin-top: 6.5rem;
+        }
+
+        .navigation-links{
+          color: black !important;
+          font-weight: 500;
+          background-color: rgb(183, 214, 252);
+          border-radius: 5px;
+          border-bottom: 4px solid blue;
+          margin: 5px;
+          background-size: 200% 200%;
+          background-image: linear-gradient( transparent 50%, rgb(79, 128, 233) 50%);
+          transition: background-position 300ms, color 300ms ease, border-color 300ms ease;
+        }
+
+        .navigation-links:hover{
+          color: white;
+          background-image: linear-gradient( transparent 50%, #3a86ff 50%);
+          background-position: 0% 100%;
+        }
+
+        .navbar{
+          background-color: #c6def1;
+          box-shadow: 0px 1px 10px black;
+        }
+
+        .navbar .container{
+          margin-bottom: 0;
+        }
+        .names{
+          color: black;
+          text-align: center;
+          margin-right: 30px;
+          margin-top: 12px;
+        }
+    </style>
+
+
+    {% block style %} {% endblock style %}
+</head>
+<body>
+<header class="site-header">
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand mr-4" href="/"
+               style="color: rgb(7, 85, 173); font-family: 'Lobster', cursive; font-weight: 800; font-size: 30px; ">Нейроварево</a>
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle"
+                    aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            {% if current_user.is_authenticated %}
+            <h4 class="names">Привет, {{ current_user.username }}!</h4>
+            <a class="nav-item nav-link navigation-links" href="{{ url_for('users.account') }}"><i
+                    class="fa fa-user"></i>Профиль</a>
+            <a class="nav-item nav-link navigation-links" href="{{ url_for('posts.new_post') }}"><i
+                    class="fa fa-plus"></i> Новый пост</a>
+
+            <a class="nav-item nav-link navigation-links" href="{{ url_for('posts.allpost') }}"><i class="fa fa-th"></i>
+                Все записи</a>
+            <a class="nav-item nav-link navigation-links" href="{{ url_for('users.logout') }}"><i
+                    class="fa fa-sign-out"></i>Выйти</a>
+            {% else %}
+            <a class="nav-link nav-item navigation-links" href="{{ url_for('users.login') }}">Войти</a>
+            <a class="nav-link nav-item navigation-links" href="{{ url_for('users.register') }}">Зарегистрироваться</a>
+            {% endif %}
+            <div class="collapse navbar-collapse" id="navbarToggle" style="justify-content: flex-end;">
+                <!-- Navbar Right Side -->
+
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main role="main" class="container">
+    <div class="row">
+        <div class="col-md-10">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+</main>
+
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+</body>
+</html>
