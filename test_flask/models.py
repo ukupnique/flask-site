@@ -1,5 +1,4 @@
 from datetime import datetime
-
 from test_flask import db, login_manager
 from flask_login import UserMixin
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
@@ -39,13 +38,25 @@ class User(db.Model, UserMixin):
 
 
 class Post(db.Model):
+
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
     date_posted = db.Column(db.DateTime, nullable=False,
-                            default=datetime.now) #rework
+                            default=datetime.now()) #rework
     content = db.Column(db.Text, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-
+    comments = db.relationship('Comment', backref='title', lazy='select',
+                               cascade='all, delete-orphan')
     def __repr__(self):
         return f"Запись('{self.title}', '{self.date_posted}')"
 
+
+
+class Comment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    body = db.Column(db.String(140))
+    timestamp = db.Column(db.DateTime, default=datetime.now )           #поправить остальное время
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'),
+							nullable=False)
+    username = db.Column(db.String, db.ForeignKey('user.username'),
+                         nullable=False)

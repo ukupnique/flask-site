@@ -8,3 +8,5 @@ class PostForm(FlaskForm):
     content = TextAreaField('Текст поста', validators=[DataRequired()])
     submit = SubmitField('Отправить')
 
+class CommentForm(FlaskForm):
+    comment = StringField('Комментарий', validators=[DataRequired()])

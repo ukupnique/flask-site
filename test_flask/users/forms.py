@@ -49,14 +49,12 @@ class UpdateAccountForm(FlaskForm):
                         validators=[FileAllowed(['jpg', 'png'])])
     submit = SubmitField('Обновить')
 
-    @staticmethod
-    def validate_username(username):
+    def validate_username(self, username):
         if username.data != current_user.username:
             user = User.query.filter_by(username=username.data).first()
             if user:
                 raise ValidationError('Это имя занято. '
                                       'Пожалуйста, выберите другой')
-
 
     def validate_email(self, email):
         if email.data != current_user.email:
@@ -79,13 +77,9 @@ class RequestResetForm(FlaskForm):
                                   'Вы можете зарегистрировать его')
 
 
-
 class ResetPasswordForm(FlaskForm):
     password = PasswordField('Пароль:', validators=[DataRequired()])
     confirm_password = PasswordField('Подтвердите пароль',
                                      validators=[DataRequired(),
                                                  EqualTo('password')])
     submit = SubmitField('Переустановить пароль')
-
-
-

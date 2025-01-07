@@ -17,7 +17,7 @@
     
     .card-title{
       margin-bottom: 0 !important;
-      font-family: 'Bebas Neue', cursive;
+
     }
 
     a{
@@ -32,7 +32,7 @@
     p{
       color: rgb(43, 37, 37);
     }
-    
+
     /* i{
       padding: 0px 7px;
       cursor: pointer;
@@ -42,24 +42,27 @@
 
 {% block content %}
 <div class="container" style="display: flex;">
-  <article class="media" style="display: flex; flex-direction: column;"> 
-    <img class="rounded-circle article-img" style="margin-right: 5px;" src="{{ url_for('static', filename='profile_pics/' + post.author.image_file) }}">
-    <a class="mr-2" href="{{ url_for('users.user_posts', username=post.author.username) }}" style="margin: 0 auto">{{ post.author.username }}</a>
-  </article>
-  
+  <article class="media" style="display: flex; flex-direction: column;">
+        <img class="rounded-circle article-img" style="margin-right: 5px; border: solid;"
+             src="{{ url_for('static', filename='profile_pics/' + post.author.image_file) }}">
+        <a href="{{ url_for('users.user_posts', username=post.author.username) }}" id="author" style="margin: 0 auto; font-weight: bold;">{{
+            post.author.username }}</a>
+    </article>
+
+
   <div class="card" style="margin-bottom: 20px;">
     <div class="card-body">
-      <h4 class="card-title">{{ post.title }}</h4>
-      <small>Опубликовано {{ post.date_posted.strftime('%A, %d %B %Y %I:%M %p') }}</small>
+      <h3 class="card-title">{{ post.title }}</h3>
+      <small>Опубликовано {{ post.date_posted.strftime('%A, %d %B %Y %I:%M') }}</small>
       <br>
       <br>
-      <p class="card-text">{{ post.content }}</p>
+      <pre class="card-text">{{ post.content }}</pre>
     </div>
     <div class="card-footer" style="font-size: 20px;">
       <!-- <i class="fa fa-heart-o"></i>
       <i class="fa fa-bookmark-o"></i> -->
       {% if post.author == current_user %}
-        <div class="card-footer" style="font-size: 20px;"> {% if post.author == current_user %}<a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{url_for('posts.update_post', post_id=post.id) }}">Обновить</a>
+        <div class="card-footer" style="font-size: 20px;"> {% if post.author == current_user %}<a class="btn btn-secondary btn-sm mt-1 mb-1" style="background: #5fba69; color: #fff" href="{{url_for('posts.update_post', post_id=post.id) }}">Редактировать</a>
         <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteModal">Удалить</button>
 
       {% endif %}
@@ -70,7 +73,7 @@
     </div>
   </div>
 </div>
-  
+
 <!-- Modal -->
   <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -90,4 +93,43 @@
       </div>
     </div>
   </div>
+
+  {% if post.comments %}
+
+      <h2>Комментарии: </h2>
+      <p>{% for comment in post.comments | reverse %}
+        <p style="font-size: 18px;">{{ comment.body }}</p>
+        <p><small>Автор: {{ comment.username }}</small>
+                <small>Дата: {{ comment.timestamp.strftime('%A, %d %B %Y %H:%M') }}</small></p>
+
+            {% if comment.username == current_user.username %}
+            <form action="{{ url_for('posts.delete_comment', comment_id=comment.id) }}" method="POST">
+              <input class="submit" type="submit" value="Удалить">
+            </form>
+            {% endif %}
+        <hr>
+      {% endfor %}</p>
+
+  {% endif %}
+
+
+<div id="content">
+        <!-- insert the page content here -->
+        <h2>Оставьте комментарий</h2>
+        <form action="" method="post">
+          {{ form.hidden_tag() }}
+          <div class="form_settings">
+
+            <p><span></span><textarea name="comment" style="width: 100%; height: 150px"></textarea>
+              {% if form.comment.errors %}
+                {% for error in form.comment.errors %}
+                  <p style="color: red">{{ error }}</p>
+                {% endfor %}
+              {% endif %}
+            </p>
+
+            <p style="padding-top: 15px"><span>&nbsp;</span><input class="submit" type="submit" name="submit" value="Сохранить" /></p>
+          </div>
+        </form>
+      </div>
 {% endblock content %}

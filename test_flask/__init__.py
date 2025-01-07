@@ -4,6 +4,12 @@ from flask_login import LoginManager
 from test_flask.config import Config
 from flask_bcrypt import Bcrypt
 from flask_mail import Mail
+import locale, sys
+
+if sys.platform == 'win32':
+    locale.setlocale(locale.LC_ALL, 'rus_rus')
+else:
+    locale.setlocale(locale.LC_ALL, 'ru_RU.UTF-8')
 
 db = SQLAlchemy()
 login_manager = LoginManager()
