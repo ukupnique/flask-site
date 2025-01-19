@@ -55,9 +55,15 @@
     <div class="card" style="margin-bottom: 20px;">
         <div class="card-body">
             <h3 class="card-title">{{ post.title }}</h3>
-            <small>Опубликовано {{ post.date_posted.strftime('%A, %d %B %Y %I:%M') }}</small>
+            <small>Опубликовано {{ post.date_posted.strftime('%A, %d %B %Y %H:%M') }}</small>
             <br>
             <br>
+            {% if post.image_file %}
+            <div class="form-group" style="text-align: center">
+                <img style="margin-right: 5px;" src="{{ url_for('static',
+                  filename='food_pics/' + post.image_file) }}">
+            </div>
+            {% endif %}
             <pre class="card-text">{{ post.content }}</pre>
         </div>
         <!-- <div class="card-footer" style="font-size: 20px;">
